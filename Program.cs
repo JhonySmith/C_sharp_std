@@ -1,43 +1,64 @@
-﻿// See https://aka.ms/new-console-template for more information
-Calculator calculator = new();
+﻿Calculator calculator = new();
 
 class Calculator {
-  int firstNumber = 0;
-  int secondNumber = 0;
-  string? operation = "";
+  string? expression = "";
+  Stack<string> stack = new(); 
 
   public Calculator() {
     Start();
+    GetExpression();
+    ParseExpression();
+    CalculateResult();
   }
-  public void Start() {
-    Console.WriteLine("Введите первое число:");
-    firstNumber = Convert.ToInt32(Console.ReadLine());
 
-    Console.WriteLine("Введите второе число:");
-    secondNumber = Convert.ToInt32(Console.ReadLine());
+  private void Start() {
 
-    Console.WriteLine("Введите операцию:");
-    operation = Console.ReadLine();
-
-    Calculate();
+    Console.WriteLine("Калькулятор/n"+ 
+                      "Введите выражение:");
   }
-  private void Calculate() {
-    switch(operation) {
-      case "+":
-        SayResult(firstNumber + secondNumber);
+  private void GetExpression() {
+    this.expression = Console.ReadLine();
+
+
+  }
+
+  private void ParseExpression() {
+    this.expression.Trim();
+    this.expression.Replace(" ","");
+    for (int i=0; i < this.expression.Length; i++) {
+      Console.WriteLine(this.expression[i]);
+    }
+  }
+
+  private void CheckSymbol(string symbol) {
+    
+    try {
+      Convert.ToInt32(symbol);
+
+      if (stack.Count > 0) {
+        string numberInStack = stack.Pop();
+        stack.Push(numberInStack + symbol);
+      } else {
+        stack.Push(symbol);
+      }
+
+    } catch {
+      stack.Push(symbol);
+    }
+  }
+
+  private void CalculateResult() {
+    
+  }
+
+  private void CheckProcessSymbol(string symbol) {
+    switch (symbol) {
+      case "+": 
         break;
       case "-":
-        SayResult(firstNumber - secondNumber);
         break;
       default:
-        Console.WriteLine("Какая то хня");
         break;
     }
-    Console.WriteLine();
-    Start();
-  }
-
-  private void SayResult(int result) {
-    Console.WriteLine($"Результат = {result}");
   }
 }
